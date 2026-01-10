@@ -8,41 +8,45 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, Shield, Lock, Wallet } from 'lucide-react';
 import { z } from 'zod';
-
 const authSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(6, 'Password must be at least 6 characters')
 });
-
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { signIn, signUp, user } = useAuth();
+  const {
+    signIn,
+    signUp,
+    user
+  } = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
     if (user) {
       navigate('/');
     }
   }, [user, navigate]);
-
   const handleSubmit = async (mode: 'signin' | 'signup') => {
     setError('');
     setIsLoading(true);
 
     // Validate inputs
-    const validation = authSchema.safeParse({ email, password });
+    const validation = authSchema.safeParse({
+      email,
+      password
+    });
     if (!validation.success) {
       setError(validation.error.errors[0].message);
       setIsLoading(false);
       return;
     }
-
     try {
       if (mode === 'signin') {
-        const { error } = await signIn(email, password);
+        const {
+          error
+        } = await signIn(email, password);
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             setError('Invalid email or password. Please try again.');
@@ -51,7 +55,9 @@ const Auth = () => {
           }
         }
       } else {
-        const { error } = await signUp(email, password);
+        const {
+          error
+        } = await signUp(email, password);
         if (error) {
           if (error.message.includes('User already registered')) {
             setError('This email is already registered. Please sign in instead.');
@@ -66,9 +72,7 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-background flex">
+  return <div className="min-h-screen bg-background flex">
       {/* Left side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/10" />
@@ -80,7 +84,7 @@ const Auth = () => {
             <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
               <Wallet className="w-7 h-7 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">WealthVault</h1>
+            <h1 className="text-3xl font-bold text-foreground">Kalash</h1>
           </div>
           
           <h2 className="text-4xl xl:text-5xl font-bold text-foreground mb-6 leading-tight">
@@ -150,42 +154,23 @@ const Auth = () => {
               </TabsList>
               
               <TabsContent value="signin">
-                <form onSubmit={(e) => { e.preventDefault(); handleSubmit('signin'); }}>
+                <form onSubmit={e => {
+                e.preventDefault();
+                handleSubmit('signin');
+              }}>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signin-email" className="text-base">Email</Label>
-                      <Input
-                        id="signin-email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="h-12 text-base"
-                        required
-                      />
+                      <Input id="signin-email" type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} className="h-12 text-base" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="signin-password" className="text-base">Password</Label>
-                      <Input
-                        id="signin-password"
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="h-12 text-base"
-                        required
-                      />
+                      <Input id="signin-password" type="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} className="h-12 text-base" required />
                     </div>
-                    {error && (
-                      <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
+                    {error && <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
                         {error}
-                      </p>
-                    )}
-                    <Button 
-                      type="submit" 
-                      className="w-full h-12 text-base font-semibold"
-                      disabled={isLoading}
-                    >
+                      </p>}
+                    <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading}>
                       {isLoading ? 'Signing in...' : 'Sign In'}
                     </Button>
                   </div>
@@ -193,42 +178,23 @@ const Auth = () => {
               </TabsContent>
               
               <TabsContent value="signup">
-                <form onSubmit={(e) => { e.preventDefault(); handleSubmit('signup'); }}>
+                <form onSubmit={e => {
+                e.preventDefault();
+                handleSubmit('signup');
+              }}>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signup-email" className="text-base">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="h-12 text-base"
-                        required
-                      />
+                      <Input id="signup-email" type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} className="h-12 text-base" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="signup-password" className="text-base">Password</Label>
-                      <Input
-                        id="signup-password"
-                        type="password"
-                        placeholder="Create a password (min 6 characters)"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="h-12 text-base"
-                        required
-                      />
+                      <Input id="signup-password" type="password" placeholder="Create a password (min 6 characters)" value={password} onChange={e => setPassword(e.target.value)} className="h-12 text-base" required />
                     </div>
-                    {error && (
-                      <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
+                    {error && <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
                         {error}
-                      </p>
-                    )}
-                    <Button 
-                      type="submit" 
-                      className="w-full h-12 text-base font-semibold"
-                      disabled={isLoading}
-                    >
+                      </p>}
+                    <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading}>
                       {isLoading ? 'Creating account...' : 'Create Account'}
                     </Button>
                   </div>
@@ -238,8 +204,6 @@ const Auth = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Auth;
